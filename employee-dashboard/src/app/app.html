@@ -1,0 +1,86 @@
+﻿<main class="dashboard">
+  <div class="header">
+    <div>
+      <p class="eyebrow">Employee Directory</p>
+      <h1>Employee Dashboard</h1>
+    </div>
+    <div class="summary">
+      <span>{{ employees.length }} employees</span>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="state">Loading employee data...</div>
+  <div *ngIf="errorMessage" class="state error">{{ errorMessage }}</div>
+
+  <div *ngIf="!loading && !errorMessage" class="content-area">
+    <div class="list-panel">
+      <div class="toolbar">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          class="search-input"
+          placeholder="Search by name or team..."
+        />
+      </div>
+
+      <div *ngIf="filteredEmployees.length === 0" class="no-results">
+        No employees match your search.
+      </div>
+
+      <table *ngIf="filteredEmployees.length > 0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Team</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of paginatedEmployees">
+            <td>{{ employee.EmployeeName || '—' }}</td>
+            <td>{{ employee.Team || '—' }}</td>
+            <td>
+              <button type="button" (click)="viewDetails(employee)">View Details</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination" *ngIf="filteredEmployees.length > 0">
+        <div class="page-numbers">
+          <button type="button" class="page-btn" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+            Prev
+          </button>
+
+          <ng-container *ngFor="let page of pageNumbers">
+            <span *ngIf="page === 'ellipsis'" class="ellipsis">...</span>
+            <button
+              *ngIf="page !== 'ellipsis'"
+              type="button"
+              class="page-number"
+              [class.active]="page === currentPage"
+              (click)="changePage(page)"
+            >
+              {{ page }}
+            </button>
+          </ng-container>
+
+          <button type="button" class="page-btn" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedEmployee" class="modal-backdrop" (click)="closeDetails()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Employee Details</h3>
+        <button type="button" class="close-btn" (click)="closeDetails()">×</button>
+      </div>
+      <app-employee-detail [employee]="selectedEmployee"></app-employee-detail>
+    </div>
+  </div>
+</main>
