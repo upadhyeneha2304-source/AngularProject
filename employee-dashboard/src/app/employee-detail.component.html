@@ -1,0 +1,13 @@
+<div class="detail-card" *ngIf="employee">
+  <h2>{{ employee.EmployeeName || 'Unknown Employee' }}</h2>
+
+  <div class="detail-grid">
+    <div><strong>Gender:</strong> {{ employee.Gender || '—' }}</div>
+    <div><strong>Team:</strong> {{ employee.Team || '—' }}</div>
+    <div><strong>Start Date:</strong> {{ employee['Start Date'] || '—' }}</div>
+    <div><strong>Last Login:</strong> {{ employee['Last Login Time'] || '—' }}</div>
+    <div><strong>Salary:</strong> ${{ employee.Salary.toLocaleString() }}</div>
+    <div><strong>Bonus %:</strong> {{ employee['Bonus %'] }}%</div>
+    <div><strong>Senior Management:</strong> {{ employee['Senior Management'] ? 'Yes' : 'No' }}</div>
+  </div>
+</div>
